@@ -10,6 +10,9 @@ Questions to be answered for each of the below techniques:
 
 ### JRuby
 
+* http://benchmarksgame.alioth.debian.org/u64q/benchmark.php?test=all&lang=jruby&lang2=yarv&data=u64q
+* http://benchmarksgame.alioth.debian.org/u64/benchmark.php?test=all&lang=jruby&lang2=yarv&data=u64
+
 ### Rubinius
 
 ### MRI
