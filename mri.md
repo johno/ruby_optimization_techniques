@@ -8,7 +8,9 @@ As the default interpreter for the Ruby programming language, the MRI has receiv
 
 That being said, there are numerous methods and best practices that developers can follow in order to ensure that they're avoiding unnecessary bottlenecks.
 
-## String Optimization
+## Some simple code enhancements
+
+### String Optimization
 
 ```ruby
 require 'benchmark'
@@ -29,3 +31,47 @@ end
 
 # => #<Benchmark::Tms:0x007fdf9b990bd8 @label="", @real=22.713976, @cstime=0.0, @cutime=0.0, @stime=0.009999999999999995, @utime=22.689999999999998, @total=22.7>
 ```
+
+### Blocks vs Procs
+
+```ruby
+fake_data = 20.times.map { |t| Fake.new(t) }
+
+proc_time = Benchmark.measure do
+  200000000.times do
+    fake_data.map(&:id)
+  end
+end
+
+#  => #<Benchmark::Tms:0x007fdf9b8b0498 @label="", @real=491.332415, @cstime=0.0, @cutime=0.0, @stime=4.8, @utime=426.06999999999994, @total=430.86999999999995>
+
+block_time = Benchmark.measure do
+  200000000.times do
+    fake_data.map { |d| d.id }
+  end
+end
+
+# => #<Benchmark::Tms:0x007fdf9b931d40 @label="", @real=431.731424, @cstime=0.0, @cutime=0.0, @stime=2.66, @utime=416.21000000000004, @total=418.87000000000006>
+
+collect_time = Benchmark.measure do
+  200000000.times do
+    fake_data.collect { |d| d.id }
+  end
+end
+
+# => #<Benchmark::Tms:0x007fdf9b821518 @label="", @real=386.234513, @cstime=0.0, @cutime=0.0, @stime=1.1800000000000006, @utime=384.28, @total=385.46> 
+ :037 >
+```
+
+### Modify Garbage Collection
+
+```bash
+export RUBY_GC_MALLOC_LIMIT=60000000
+export RUBY_FREE_MIN=200000
+```
+
+https://lightyearsoftware.com/2012/11/speed-up-mri-ruby-1-9/
+
+### Fine Tune Your Objects
+
+http://patshaughnessy.net/2013/2/8/ruby-mri-source-code-idioms-3-embedded-objects
