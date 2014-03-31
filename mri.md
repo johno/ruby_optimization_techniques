@@ -25,7 +25,15 @@ http://www.igvita.com/2008/11/13/concurrency-is-a-myth-in-ruby/
 
 The primary reason is that the GIL is used to avoid race conditions within C extensions. There are also thread safety reasons, too. Parts of Ruby aren't thread safe (Hash), and numerous C libraries that are wrapped by Ruby's internals. Additionally, the GIL is integral to data integrity, because it ensures that the developer doesn't write any unsafe threading code.
 
-However, this runs contrary to the fundamental principles of the Ruby language, where all the responsibility is laid on the developer. A developer has the ultimate freedom without hand holding, yet the GIL is just that, hand holding.
+This, interestingly enough, runs contrary to the fundamental principles of the Ruby language, where all the responsibility is laid on the developer. Ruby allows the developer to have the ultimate freedom without hand holding, yet the GIL is just that, hand holding.
+
+### The GIL is here to stay
+
+The GIL is deeply intertwined with Ruby and its internals, and many influential Ruby-core figures don't plan on removing the GIL anytime in the near future. Though, this doesn't mean the concurrency can't be achieved. Koichi
+
+> Nevertheless, you're right the GIL is not as bad as you would initially think: you just have to undo the brainwashing you got from Windows and Java proponents who seem to consider threads as the only way to approach concurrent activities. Just because Java was once aimed at a set-top box OS that didn't support multiple address spaces, and just because process creation in Windows used to be slow as a dog, doesn't mean that multiple processes (with judicious use of IPC) aren't a much better approach to writing apps for multi-CPU boxes than threads.
+
+https://mail.python.org/pipermail/python-3000/2007-May/007414.html
 
 https://news.ycombinator.com/item?id=3070382
 http://merbist.com/2011/10/18/data-safety-and-gil-removal/
