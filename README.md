@@ -18,3 +18,7 @@ Questions to be answered for each of the below techniques:
 ### MRI
 
 ### YARV
+
+## Interesting resources
+
+* http://www.isrubyfastyet.com/
