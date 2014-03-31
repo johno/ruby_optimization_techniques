@@ -29,11 +29,22 @@ This, interestingly enough, runs contrary to the fundamental principles of the R
 
 ### The GIL is here to stay
 
-The GIL is deeply intertwined with Ruby and its internals, and many influential Ruby-core figures don't plan on removing the GIL anytime in the near future. Though, this doesn't mean the concurrency can't be achieved. Koichi
+The GIL is deeply intertwined with Ruby and its internals, and many influential Ruby-core figures don't plan on removing the GIL anytime in the near future. Though, this doesn't mean the concurrency can't be achieved. 
+
+### Sidestep the GIL with multiple virtual machines
+
+Sasada Koichi has proposed a Multiple VM (MVM) solution, which is currently being developed. This would consist of multiple virtual machines, running their own processes, and communicate via sockets.
+
+Granted, this is a drastic step away from typical threading, but some proponents believe that traditional threading isn't necessarily the correct paradigm to follow. Especially considering the fact the Ruby leverages green threads rather than talking to the OS directly.
 
 > Nevertheless, you're right the GIL is not as bad as you would initially think: you just have to undo the brainwashing you got from Windows and Java proponents who seem to consider threads as the only way to approach concurrent activities. Just because Java was once aimed at a set-top box OS that didn't support multiple address spaces, and just because process creation in Windows used to be slow as a dog, doesn't mean that multiple processes (with judicious use of IPC) aren't a much better approach to writing apps for multi-CPU boxes than threads.
 
+
+
 https://mail.python.org/pipermail/python-3000/2007-May/007414.html
+http://archive.is/yCFB
+http://archive.is/X1kh
+http://www.confreaks.com/videos/1272-rubyconf2012-implementation-details-of-ruby-2-0-vm
 
 https://news.ycombinator.com/item?id=3070382
 http://merbist.com/2011/10/18/data-safety-and-gil-removal/
