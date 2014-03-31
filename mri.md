@@ -8,6 +8,29 @@ As the default interpreter for the Ruby programming language, the MRI has receiv
 
 That being said, there are numerous methods and best practices that developers can follow in order to ensure that they're avoiding unnecessary bottlenecks.
 
+## Performance out of the box
+
+Thanks to the introduction of YARV, vanilla Ruby, on a single thread, has the ability to outperform other alternative Ruby implementations. Consider the following figure, that measures Rails requests per second.
+
+![screen shot 2014-03-31 at 5 06 28 pm](https://cloud.githubusercontent.com/assets/1424573/2574040/8c8da974-b929-11e3-84c8-04d792bcbbd9.png)
+
+## Global Interpreter Lock
+
+When attempting to optimize execution speed, threads are often utilized in order to process tasks concurrently. This is a feature that Ruby supports, too. However, the MRI/YARV incorporates a Global Interpreter Lock, or GIL, that doesn't permit any true concurrency. A GIL refers to an interpreter thread that doesn't allow code that isn't thread safe to share itself with other threads. This results in little, to no, actual gain in speed when running threads on a multiprocessor machine.
+
+![screen shot 2014-03-31 at 5 15 19 pm](https://cloud.githubusercontent.com/assets/1424573/2574079/5e0967fe-b92a-11e3-9806-65ea3d4d04cf.png)
+http://www.igvita.com/2008/11/13/concurrency-is-a-myth-in-ruby/
+
+### Why implement a GIL?
+
+The primary reason is that the GIL is used to avoid race conditions within C extensions. There are also thread safety reasons, too. Parts of Ruby aren't thread safe (Hash), and numerous C libraries that are wrapped by Ruby's internals. Additionally, the GIL is integral to data integrity, because it ensures that the developer doesn't write any unsafe threading code.
+
+However, this runs contrary to the fundamental principles of the Ruby language, where all the responsibility is laid on the developer. A developer has the ultimate freedom without hand holding, yet the GIL is just that, hand holding.
+
+https://news.ycombinator.com/item?id=3070382
+http://merbist.com/2011/10/18/data-safety-and-gil-removal/
+http://merbist.com/2011/10/03/about-concurrency-and-the-gil/
+
 ## Some simple code enhancements
 
 ### String Optimization
