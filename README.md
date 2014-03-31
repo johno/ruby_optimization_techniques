@@ -23,3 +23,4 @@ Questions to be answered for each of the below techniques:
 
 * http://www.isrubyfastyet.com/
 * http://miguelcamba.com/blog/2013/10/05/benchmarking-the-ruby-2-dot-1-and-rubinius-2-dot-0/
+* http://www.igvita.com/2008/11/13/concurrency-is-a-myth-in-ruby/
