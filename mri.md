@@ -131,6 +131,39 @@ http://patshaughnessy.net/2013/2/8/ruby-mri-source-code-idioms-3-embedded-object
 
 ### Use Unicorn
 
+For Ruby on Rails web applications, a server typically runs on a single process, which means that every request is processed one at a time. This can create a significant bottle neck in your application. Fortunately, there are libraries to incorporate concurrency in your application. One of which is Unicorn.
+
+Unicorn uses Unix forks within a dyno (web worker) to create multiple instances of itself. Now, there are multiple OS instances that can all respond to requests, and complete tasks concurrently. This results in smaller queues, quicker responses, and a faster web application as a whole. The only drawback is memory usage, which can grow to large sizes. Though, with decreasing hardware costs, this becomes a worthwhile expenditure to ensure quick development time for the software components. This also doesn't require thread safe code, since each worker is a self-sufficient clone of the parent.
+
+Ruby 2.0 makes process forking even more efficient with Unicorn because it implements Copy-on-Write (CoW), which means that a parent and child share physical memory until a write needs to be made. This is a very efficient sharing of resources that can drastically reduce memory use.
+
+Sometimes, there are still issues with memory leakage, which occurs when workers get stuck or timeout. With the inclusion of a gem, and a small snippet of code that's included below, these edge cases are covered.
+
+```ruby
+# --- Start of unicorn worker killer code ---
+
+if ENV['RAILS_ENV'] == 'production' 
+  require 'unicorn/worker_killer'
+
+  max_request_min =  500
+  max_request_max =  600
+
+  # Max requests per worker
+  use Unicorn::WorkerKiller::MaxRequests, max_request_min, max_request_max
+
+  oom_min = (240) * (1024**2)
+  oom_max = (260) * (1024**2)
+
+  # Max memory size (RSS) per worker
+  use Unicorn::WorkerKiller::Oom, oom_min, oom_max
+end
+
+# --- End of unicorn worker killer code ---
+
+require ::File.expand_path('../config/environment',  __FILE__)
+run YourApp::Application
+```
+
 https://www.digitalocean.com/community/articles/how-to-optimize-unicorn-workers-in-a-ruby-on-rails-app
 
 ### Use Ruby Threads and Fibers
