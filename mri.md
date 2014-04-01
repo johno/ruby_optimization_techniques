@@ -52,6 +52,8 @@ http://merbist.com/2011/10/03/about-concurrency-and-the-gil/
 
 ### String Optimization
 
+String interpolation is significantly more performant than concatentation because it doesn't need to allocate new strings, it just modifies a single string in place.
+
 ```ruby
 require 'benchmark'
 
@@ -73,6 +75,15 @@ end
 ```
 
 ### Blocks vs Procs
+
+The `collect|map` methods with blocks are faster because it returns a new array rather than an enumerator. This can be leveraged to increase speed when compared to `Symbol.to_proc` implementations. Though, the latter is typically much more preferable to read. The reason that the `Symbol.to_proc` is slower is because `to_proc` is called on the symbol to perform the following conversion:
+
+```ruby
+:method.to_proc 
+# => -> x { x.method }
+```
+
+http://www.ruby-doc.org/core-2.1.1/Array.html#M000249
 
 ```ruby
 fake_data = 20.times.map { |t| Fake.new(t) }
@@ -105,11 +116,13 @@ end
 
 ### Modify Garbage Collection
 
-```bash
-export RUBY_GC_MALLOC_LIMIT=60000000
-export RUBY_FREE_MIN=200000
+```ruby
+RUBY_HEAP_MIN_SLOTS=600000 # This is 60(!) times larger than default
+RUBY_GC_MALLOC_LIMIT=59000000 # This is 7 times larger than default
+RUBY_HEAP_FREE_MIN=100000 # This is 24 times larger than default
 ```
 
+http://www.rubyenterpriseedition.com/documentation.html
 https://lightyearsoftware.com/2012/11/speed-up-mri-ruby-1-9/
 
 ### Fine Tune Your Objects
