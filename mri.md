@@ -128,3 +128,11 @@ https://lightyearsoftware.com/2012/11/speed-up-mri-ruby-1-9/
 ### Fine Tune Your Objects
 
 http://patshaughnessy.net/2013/2/8/ruby-mri-source-code-idioms-3-embedded-objects
+
+### Use Unicorn
+
+https://www.digitalocean.com/community/articles/how-to-optimize-unicorn-workers-in-a-ruby-on-rails-app
+
+### Use Ruby Threads and Fibers
+
+http://merbist.com/2011/02/22/concurrency-in-ruby-explained/
