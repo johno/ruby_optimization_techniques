@@ -13,6 +13,7 @@ That being said, there are numerous methods and best practices that developers c
 Thanks to the introduction of YARV, vanilla Ruby, on a single thread, has the ability to outperform other alternative Ruby implementations. Consider the following figure, that measures Rails requests per second.
 
 ![screen shot 2014-03-31 at 5 06 28 pm](https://cloud.githubusercontent.com/assets/1424573/2574040/8c8da974-b929-11e3-84c8-04d792bcbbd9.png)
+http://www.isrubyfastyet.com/
 
 ## Global Interpreter Lock
 
@@ -38,15 +39,6 @@ Sasada Koichi has proposed a Multiple VM (MVM) solution, which is currently bein
 Granted, this is a drastic step away from typical threading, but some proponents believe that traditional threading isn't necessarily the correct paradigm to follow. Especially considering the fact the Ruby leverages green threads above the GIL rather than talking to the OS directly.
 
 > Nevertheless, you're right the GIL is not as bad as you would initially think: you just have to undo the brainwashing you got from Windows and Java proponents who seem to consider threads as the only way to approach concurrent activities. Just because Java was once aimed at a set-top box OS that didn't support multiple address spaces, and just because process creation in Windows used to be slow as a dog, doesn't mean that multiple processes (with judicious use of IPC) aren't a much better approach to writing apps for multi-CPU boxes than threads.
-
-https://mail.python.org/pipermail/python-3000/2007-May/007414.html
-http://archive.is/yCFB
-http://archive.is/X1kh
-http://www.confreaks.com/videos/1272-rubyconf2012-implementation-details-of-ruby-2-0-vm
-
-https://news.ycombinator.com/item?id=3070382
-http://merbist.com/2011/10/18/data-safety-and-gil-removal/
-http://merbist.com/2011/10/03/about-concurrency-and-the-gil/
 
 ## Some simple code enhancements
 
@@ -82,8 +74,6 @@ The `collect|map` methods with blocks are faster because it returns a new array 
 :method.to_proc 
 # => -> x { x.method }
 ```
-
-http://www.ruby-doc.org/core-2.1.1/Array.html#M000249
 
 ```ruby
 fake_data = 20.times.map { |t| Fake.new(t) }
@@ -122,13 +112,6 @@ RUBY_GC_MALLOC_LIMIT=59000000 # This is 7 times larger than default
 RUBY_HEAP_FREE_MIN=100000 # This is 24 times larger than default
 ```
 
-http://www.rubyenterpriseedition.com/documentation.html
-https://lightyearsoftware.com/2012/11/speed-up-mri-ruby-1-9/
-
-### Fine Tune Your Objects
-
-http://patshaughnessy.net/2013/2/8/ruby-mri-source-code-idioms-3-embedded-objects
-
 ### Use Unicorn
 
 For Ruby on Rails web applications, a server typically runs on a single process, which means that every request is processed one at a time. This can create a significant bottle neck in your application. Fortunately, there are libraries to incorporate concurrency in your application. One of which is Unicorn.
@@ -164,8 +147,33 @@ require ::File.expand_path('../config/environment',  __FILE__)
 run YourApp::Application
 ```
 
-https://www.digitalocean.com/community/articles/how-to-optimize-unicorn-workers-in-a-ruby-on-rails-app
+###### GIL
 
-### Use Ruby Threads and Fibers
+  - https://mail.python.org/pipermail/python-3000/2007-May/007414.html
+  - http://archive.is/yCFB
+  - http://archive.is/X1kh
+  - http://www.confreaks.com/videos/1272-rubyconf2012-implementation-details-of-ruby-2-0-vm
+  - https://news.ycombinator.com/item?id=3070382
+  - http://merbist.com/2011/10/18/data-safety-and-gil-removal/
+  - http://merbist.com/2011/10/03/about-concurrency-and-the-gil/
 
-http://merbist.com/2011/02/22/concurrency-in-ruby-explained/
+###### GC
+
+  - http://www.rubyenterpriseedition.com/documentation.html
+  - https://lightyearsoftware.com/2012/11/speed-up-mri-ruby-1-9/
+
+###### Unicorn
+
+  - https://www.digitalocean.com/community/articles/how-to-optimize-unicorn-workers-in-a-ruby-on-rails-app
+
+###### Use Ruby Threads and Fibers
+
+  - http://merbist.com/2011/02/22/concurrency-in-ruby-explained/
+
+###### Fine Tune Your Objects
+
+  - http://patshaughnessy.net/2013/2/8/ruby-mri-source-code-idioms-3-embedded-objects
+
+###### Code optimizations
+
+  - http://www.ruby-doc.org/core-2.1.1/Array.html#M000249
