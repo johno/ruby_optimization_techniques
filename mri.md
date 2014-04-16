@@ -59,7 +59,7 @@ end
 
 interp_time = Benchmark.measure do
   20000000.times do
-    str = "#{ str1 }#{ str2 }#{ str3 }"
+    str = "#{ 'str1' }#{ 'str2' }#{ 'str3' }"
   end
 end
 
