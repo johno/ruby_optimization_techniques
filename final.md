@@ -1,8 +1,8 @@
 # Ruby Language Optimization Techniques
 
 * NICHOLAS BENDER, BOISE STATE UNIVERSITY
-* JOHN OTANDER, BOISE STATE UNIVERSITY
 * BEN NEELY, BOISE STATE UNIVERSITY
+* JOHN OTANDER, BOISE STATE UNIVERSITY
 
 The Ruby programming language has experienced a recent period of intense adoption and growth due to its excellent speed of iteration and due in no small part to the acceptance of the Ruby on Rails web framework within the startup sphere. While support is growing steadily for the language, it is largely dismissed as not having effective scalability, or having far slower runtimes than more traditional strongly-typed complex languages. In this article, we propose that many sophisticated techniques exist to enhance Ruby’s performance both in using existing runtimes to compile ruby to statically typed languages, and in  using common anti-patterns to improve performance natively. Through experimentation and thorough research we conclude that Ruby performs competitively against it’s similar scripting language counterparts, and can see increases of [XXXXX]% in many cases.
 
