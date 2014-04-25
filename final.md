@@ -4,7 +4,9 @@
 * BEN NEELY, BOISE STATE UNIVERSITY
 * JOHN OTANDER, BOISE STATE UNIVERSITY
 
-The Ruby programming language has experienced a recent period of intense adoption and growth due to its excellent speed of iteration and due in no small part to the acceptance of the Ruby on Rails web framework within the startup sphere. While support is growing steadily for the language, it is largely dismissed as not having effective scalability, or having far slower runtimes than more traditional strongly-typed complex languages. In this article, we propose that many sophisticated techniques exist to enhance Ruby’s performance both in using existing runtimes to compile ruby to statically typed languages, and in  using common anti-patterns to improve performance natively. Through experimentation and thorough research we conclude that Ruby performs competitively against it’s similar scripting language counterparts, and can see increases of [XXXXX]% in many cases.
+The Ruby programming language has experienced a recent period of intense adoption and growth due to its excellent speed of iteration, elegant syntax, and passionate community. Additionally, the popular web framework, Ruby on Rails,  has given the Ruby language exceptional legitimacy, especially in the prototyping, startup space. It is a tool that emphasizes developer happiness, productivity, and places the responsibility of program in the developer's hands. This gives the language a lot of power, but can serve as a double-edged sword. When leveraged incorrectly, projects can swiftly become inefficient and unmaintainable. Additionally, allowing this flexibility has serious implications with memory management, efficiency, and execution times.
+
+While support is growing steadily for the language, it is largely dismissed as not having effective scalability, and having far slower runtimes than more compiled, strongly-typed languages. In this article, we propose that many sophisticated techniques exist to enhance Ruby’s performance both in using existing runtimes to compile ruby to statically typed languages, and in using common anti-patterns to improve performance natively. Through experimentation and thorough research we conclude that Ruby performs competitively against it’s similar scripting language counterparts, and can see increases of [XXXXX]% in many cases.
 
 __Categories and Subject Descriptors:__ D.2.3 [Coding Tools and Techniques]: Object-oriented programming, B.6.3 [Design Aids]: Optimization   
 __General Terms:__ Optimization, Algorithms, Performance   
@@ -12,44 +14,68 @@ __Additional Key Words and Phrases:__ Ruby, Web Development, JRE, C++, C
 
 ## INTRODUCTION
 
-In recent years, the Ruby programming language has grown its community and established itself as a valuable and popular tool for many tasks [O’Donoghue, 2014]. The success of Ruby on Rails as a prototyping framework as well as a full-stack solution for some larger companies has brought forth a myriad of techniques to ensure that the language’s speed differences compared to similar languages are minimal. Ruby’s slower performance as compared to C or Java is attributed to interpreted execution, dynamic typing, meta-programming support, and the Global Interpreter Lock [Odaira, Castanos, and Tomari, 2014]. This increase in popularity has caused a large number independent optimization efforts to arise from large corporations such as IBM, as well as efforts from the Ruby open-source community.
+Ruby is an object oriented, dynamically-typed, high-level scripting language. It is a programming language that was written for humans and just happens to run on computers. It's intended to promote developer happiness through simplicity, elegant libraries, and terse, readable syntax. Ruby also uses duck typing, meaning type is determined through methods and properties. With each of these techniques and language features there exist certain sacrifices. In this exploration we will conclude that the best practices for stable, performant Ruby programs exist by utilizing the newest versions of the core language properly.
 
-With each of these techniques there exist certain sacrifices, but in this exploration we will conclude that the best practices for stable, performant Ruby code exist by utilizing the newest versions of the core language properly, and not by utilizing other third party interpreters or solutions.
+In recent years, the Ruby programming language has grown its community and established itself as a valuable, popular tool for many tasks [O’Donoghue, 2014]. The success of Ruby on Rails as a prototyping framework, as well as a full-stack solution for some larger companies, has brought forth a myriad of techniques to ensure that the language’s speed differences compared to similar languages are minimal. Ruby’s slower performance, as compared to C or Java, is attributed to interpreted execution, dynamic typing, meta-programming support, and the Global Interpreter Lock [Odaira, Castanos, and Tomari, 2014]. This increase in popularity has caused a large number independent optimization efforts to arise from large corporations such as IBM and AT&T, as well as efforts from the Ruby open-source community.
 
-Ruby is an object oriented, dynamically-typed, high-level scripting language. It is a programming language that was written for humans and just happens to run on computers. It's intended to promote developer happiness through simplicity, elegant libraries, and terse, readable syntax. Ruby uses duck typing, meaning type is determined through methods and properties.
+> When I see a bird that walks like a duck and swims like a duck and quacks like a duck, I call that bird a duck. - Heim, Michael (2007).
 
-When I see a bird that walks like a duck and swims like a duck and quacks like a duck, I call that bird a duck.
-Heim, Michael (2007). Exploring Indiana Highways. Exploring America's Highway. p. 68. ISBN 978-0-9744358-3-1.
+## MRI (> 1.9)
 
-Program Execution at a High Level
+The MRI is short for Matz's Ruby Interpreter, which is sometimes also referred to as CRuby. The MRI is named after Yukihiro Matsumoto, the chief designer of the Ruby language. The original MRI was the runtime environment from Ruby's inception to 1.8.7.
 
-```
-CODE => TOKENIZATION => PARSE TREE => COMPILATION => YARV INSTRUCTIONS
-```
-
-When a Ruby program is executed, it first tokenizes the program. This means that the contents are converted into a collection of tokens with associated types.  Ruby uses the LALR (Look-Ahead Left Reversed Rightmost Derivation) Parser to apply meaning to the tokens and construct the Abstract Syntax Tree. The compilation step was introduced with Ruby 1.9, and is where the YARV (Yet Another Ruby Virtual Machine) comes into play. It translates the code into bytecode, or YARV instructions.
-
-YARV instructions for a simple program:
+### 2.1 Program Execution at a High Level
 
 ```
-~|||$ irb
-2.1.1 :001 > code = <<CODE
-2.1.1 :002"> puts 1 + 2
-2.1.1 :003"> CODE
- => "puts 1 + 2\n" 
-2.1.1 :004 > puts RubyVM::InstructionSequence.compile(code).disasm
-== disasm: <RubyVM::InstructionSequence:<compiled>@<compiled>>==========
-0000 trace            1                                               (   1)
-0002 putself          
-0003 putobject_OP_INT2FIX_O_1_C_ 
-0004 putobject        2
-0006 opt_plus         <callinfo!mid:+, argc:1, ARGS_SKIP>
-0008 opt_send_simple  <callinfo!mid:puts, argc:1, FCALL|ARGS_SKIP>
-0010 leave            
- => nil
+| --------- |
+|   Ruby    |
+| --------- |
+|  Tokens   |
+| --------- |
+| AST Nodes |
+| --------- |
+     |
+     | Interpret
+     | 
+     v
+| --------- |
+|     C     |
+| --------- |
+|  Machine  |
+|  Language |
+| --------- |
 ```
 
-The introduction of the compilation step and YARV have significantly helped the execution speed of Ruby programs. However, there's always room for more improvements.
+A Ruby script undergoes a tokenization step, which is then parsed into an Abstract Syntax Tree. The Ruby C code (MRI), reads and executes the AST. Note that there is no compilation or translation step.
+
+### 2.2 Performance
+
+Since there isn't a bytecode compilation step, the execution of Ruby programs requires walking the MRI's internal Abstract Syntax Tree. This slows the execution speed significantly because it's more costly to interpret the AST data structure during runtime.
+
+![ch_abstract_syntree](https://cloud.githubusercontent.com/assets/1424573/2803533/3c359946-cc9d-11e3-9b35-217ccda504df.png)
+http://edwinmeyer.com/Release_Integrated_RHG_09_10_2008/intro.html
+
+### 2.3 Bottleneck
+
+### Optimizations
+
+User receiver methods whenever possible because it avoids the allocation of a copied string.
+
+```ruby
+2.1.1 :003 > str = "A string.\n"
+ => "A string.\n" 
+2.1.1 :004 > str2 = str
+ => "A string.\n" 
+2.1.1 :005 > str.chomp!
+ => "A string." 
+2.1.1 :006 > str2
+ => "A string." 
+2.1.1 :007 >
+```
+
+### Conclusion
+
+The initial implementation of the MRI is one of the primary reasons that Ruby get its "bad wrap" for code execution speed.
 
 ## JRUBY
 
@@ -103,10 +129,39 @@ Rubinius is unique amongst Ruby implementations in that it does not have Global 
 
 Rubinius’ development has been spotty, depending heaving on a few developers and a few corporate sponsors. As a result Rubinius has constantly shifted focus. Rubinius currently offers a significant advantage over other Ruby interpreters only with regards to programming involving threading and concurrency. For all other uses, the standard MRI Ruby interpreter is faster and more consistently supported.
 
-## 4. MRI/YARV
+## 4. YARV
+
+
+
+```
+CODE => TOKENIZATION => PARSE TREE => COMPILATION => YARV INSTRUCTIONS
+```
+
+When a Ruby program is executed, it first tokenizes the program. This means that the contents are converted into a collection of tokens with associated types.  Ruby uses the LALR (Look-Ahead Left Reversed Rightmost Derivation) Parser to apply meaning to the tokens and construct the Abstract Syntax Tree. The compilation step was introduced with Ruby 1.9, and is where the YARV (Yet Another Ruby Virtual Machine) comes into play. It translates the code into bytecode, or YARV instructions.
+
+YARV instructions for a simple program:
+
+```
+~|||$ irb
+2.1.1 :001 > code = <<CODE
+2.1.1 :002"> puts 1 + 2
+2.1.1 :003"> CODE
+ => "puts 1 + 2\n" 
+2.1.1 :004 > puts RubyVM::InstructionSequence.compile(code).disasm
+== disasm: <RubyVM::InstructionSequence:<compiled>@<compiled>>==========
+0000 trace            1                                               (   1)
+0002 putself          
+0003 putobject_OP_INT2FIX_O_1_C_ 
+0004 putobject        2
+0006 opt_plus         <callinfo!mid:+, argc:1, ARGS_SKIP>
+0008 opt_send_simple  <callinfo!mid:puts, argc:1, FCALL|ARGS_SKIP>
+0010 leave            
+ => nil
+```
+
+The introduction of the compilation step and YARV have significantly helped the execution speed of Ruby programs. However, there's always room for more improvements.
 
 ### 4.1 Purpose
-
  The Ruby MRI is short for Matz's Ruby Interpreter, and is the reference implementation for the Ruby programming language. It was released to the public in 1995, and is still actively developed, with the latest stable build being Ruby 2.1.1.
 
 The YARV is an interpreter developed by Koichi Sasada that's also known as the KRI. It was developed in order to reduce the execution time of Ruby programs, and was very successful. As a result, YARV was merged into Ruby 1.9.0 and has replaced the MRI.
@@ -245,3 +300,9 @@ run YourApp::Application
 ## CONCLUSIONS
 
 In this article, we examined a number independent Ruby optimization efforts. Each of these efforts seek to achieve performance improvements through a variety of techniques. In our examination we’ve determined that for each of these techniques there are certain sacrifices, that outweigh the marginal benefits are gained. Unless a particular feature is needed (such as full threading support or inline Java) the best practices for stable, performant Ruby code exist by utilizing the newest versions of the core language.
+
+
+
+http://www.rubyinside.com/ruby-1-9-3-faster-loading-times-require-4927.html
+
+http://www.valentinmihov.com/2009/07/13/ruby_19_vs_ruby_18_benchmark/
