@@ -302,7 +302,16 @@ run YourApp::Application
 
 In this article, we examined a number independent Ruby optimization efforts. Each of these efforts seek to achieve performance improvements through a variety of techniques. In our examination we’ve determined that for each of these techniques there are certain sacrifices, that outweigh the marginal benefits are gained. Unless a particular feature is needed (such as full threading support or inline Java) the best practices for stable, performant Ruby code exist by utilizing the newest versions of the core language.
 
-
+```ruby
+[1] pry(main)> class NilClass
+[1] pry(main)*   def nil?
+[1] pry(main)*     false
+[1] pry(main)*   end  
+[1] pry(main)* end  
+=> :nil?
+[2] pry(main)> nil.nil?
+=> false
+```
 
 http://www.rubyinside.com/ruby-1-9-3-faster-loading-times-require-4927.html
 
