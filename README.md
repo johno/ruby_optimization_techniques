@@ -195,6 +195,7 @@ Nevertheless, you're right the GIL is not as bad as you would initially think: y
 
 String interpolation is significantly more performant than concatentation because it doesn't need to allocate new strings, it just modifies a single string in place.
 
+```ruby
 require 'benchmark'
 
 concat_time = Benchmark.measure do
@@ -204,7 +205,9 @@ concat_time = Benchmark.measure do
 end
 
 # => #<Benchmark::Tms:0x007fdf9ba49ea8 @label="", @real=79.152523, @cstime=0.0, @cutime=0.0, @stime=0.04000000000000001, @utime=79.11, @total=79.15> 
+```
 
+```ruby
 interp_time = Benchmark.measure do
   20000000.times do
     str = 'str1' << 'str2' << 'str3'
@@ -212,6 +215,7 @@ interp_time = Benchmark.measure do
 end
 
 # => #<Benchmark::Tms:0x007fdf9b990bd8 @label="", @real=22.713976, @cstime=0.0, @cutime=0.0, @stime=0.009999999999999995, @utime=22.689999999999998, @total=22.7>
+```
 
 The collect|map methods with blocks are faster because it returns a new array rather than an enumerator. This can be leveraged to increase speed when compared to Symbol.to_proc implementations. Though, the latter is typically much more preferable to read. The reason that the Symbol.to_proc is slower is because to_proc is called on the symbol to perform the following conversion:
 
