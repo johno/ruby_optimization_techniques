@@ -18,7 +18,7 @@ Ruby is an object oriented, dynamically-typed, high-level scripting language. It
 
 In recent years, the Ruby programming language has grown its community and established itself as a valuable, popular tool for many tasks [O’Donoghue, 2014]. The success of Ruby on Rails as a prototyping framework, as well as a full-stack solution for some larger companies, has brought forth a myriad of techniques to ensure that the language’s speed differences compared to similar languages are minimal. Ruby’s slower performance, as compared to C or Java, is attributed to interpreted execution, dynamic typing, meta-programming support, and the Global Interpreter Lock [Odaira, Castanos, and Tomari, 2014]. This increase in popularity has caused a large number independent optimization efforts to arise from large corporations such as IBM and AT&T, as well as efforts from the Ruby open-source community.
 
-> When I see a bird that walks like a duck and swims like a duck and quacks like a duck, I call that bird a duck. - Heim, Michael (2007).
+> When I see a bird that walks like a duck and swims like a duck and quacks like a duck, I call that bird a duck. <br>_- Heim, Michael (2007)._
 
 ## MRI (> 1.9)
 
@@ -45,6 +45,7 @@ The MRI is short for Matz's Ruby Interpreter, which is sometimes also referred t
 |  Language |
 | --------- |
 ```
+<div class="figure">Fig. 1. Ruby Program Execution</div>
 
 A Ruby script undergoes a tokenization step, which is then parsed into an Abstract Syntax Tree. The Ruby C code (MRI), reads and executes the AST. Note that there is no compilation or translation step.
 

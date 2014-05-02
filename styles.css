@@ -5,6 +5,7 @@ h4,
 h5,
 h6 {
   font-weight: 600;
+  font-family: "Helvetica Neue";
 }
 
 p {
@@ -31,5 +32,10 @@ blockquote {
 .figure a {
   color: #888;
   font-size: 10px;
+  margin-left: 10px;
+}
+
+img {
+  margin: 10px;
 }
 
