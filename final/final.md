@@ -74,6 +74,7 @@ User receiver methods whenever possible because it avoids the allocation of a co
  => "A string." 
 2.1.1 :007 >
 ```
+<div class="figure">Fig 2. Receiver modifying methods vs receiver duplicating methods</div>
 
 ### Conclusion
 
