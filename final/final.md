@@ -54,12 +54,9 @@ A Ruby script undergoes a tokenization step, which is then parsed into an Abstra
 Since there isn't a bytecode compilation step, the execution of Ruby programs requires walking the MRI's internal Abstract Syntax Tree. This slows the execution speed significantly because it's more costly to interpret the AST data structure during runtime.
 
 ![ch_abstract_syntree](https://cloud.githubusercontent.com/assets/1424573/2803533/3c359946-cc9d-11e3-9b35-217ccda504df.png)
+<div class="figure">Fig. 2. Abstract Syntax Tree <http://edwinmeyer.com/Release_Integrated_RHG_09_10_2008/intro.html></div>
 
-http://edwinmeyer.com/Release_Integrated_RHG_09_10_2008/intro.html
-
-### 2.3 Bottleneck
-
-### 2.4 Optimizations
+### 2.3 Optimizations
 
 User receiver methods whenever possible because it avoids the allocation of a copied string.
 
@@ -74,7 +71,7 @@ User receiver methods whenever possible because it avoids the allocation of a co
  => "A string."
 2.1.1 :007 >
 ```
-<div class="figure">Fig 2. Receiver modifying methods vs receiver duplicating methods</div>
+<div class="figure">Fig 3. Receiver modifying methods vs receiver duplicating methods</div>
 
 ### Conclusion
 
