@@ -1,8 +1,8 @@
 # Ruby Language Optimization Techniques
 
-* NICHOLAS BENDER, BOISE STATE UNIVERSITY
-* BEN NEELY, BOISE STATE UNIVERSITY
-* JOHN OTANDER, BOISE STATE UNIVERSITY
+NICHOLAS BENDER, Boise State University  
+BEN NEELY, Boise State University   
+JOHN OTANDER, Boise State University  
 
 The Ruby programming language has experienced a recent period of intense adoption and growth due to its excellent speed of iteration, elegant syntax, and passionate community. Additionally, the popular web framework, Ruby on Rails,  has given the Ruby language exceptional legitimacy, especially in the prototyping, startup space. It is a tool that emphasizes developer happiness, productivity, and places the responsibility of program in the developer's hands. This gives the language a lot of power, but can serve as a double-edged sword. When leveraged incorrectly, projects can swiftly become inefficient and unmaintainable. Additionally, allowing this flexibility has serious implications with memory management, efficiency, and execution times.
 

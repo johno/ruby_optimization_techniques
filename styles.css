@@ -1,0 +1,35 @@
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 600;
+}
+
+p {
+  line-height: 1.2em;
+  font-family: 'Times New Roman'; 
+}
+
+pre {
+  margin: 10px;
+  font-family: Monaco;
+  background-color: #eee;
+  border-top: 10px solid #ddd;
+  border-bottom: 10px solid #ddd;
+  padding: 20px;
+}
+
+blockquote {
+  background-color: #eee;
+  padding: 20px;
+  border-left: 10px solid #ddd;
+}
+
+.figure,
+.figure a {
+  color: #888;
+  font-size: 10px;
+}
+
