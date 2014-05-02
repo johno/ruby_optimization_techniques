@@ -1,16 +1,18 @@
 # Ruby Language Optimization Techniques
 
-NICHOLAS BENDER, Boise State University  
-BEN NEELY, Boise State University   
-JOHN OTANDER, Boise State University  
+NICHOLAS BENDER, Boise State University
+BEN NEELY, Boise State University
+JOHN OTANDER, Boise State University
 
 The Ruby programming language has experienced a recent period of intense adoption and growth due to its excellent speed of iteration, elegant syntax, and passionate community. Additionally, the popular web framework, Ruby on Rails,  has given the Ruby language exceptional legitimacy, especially in the prototyping, startup space. It is a tool that emphasizes developer happiness, productivity, and places the responsibility of program in the developer's hands. This gives the language a lot of power, but can serve as a double-edged sword. When leveraged incorrectly, projects can swiftly become inefficient and unmaintainable. Additionally, allowing this flexibility has serious implications with memory management, efficiency, and execution times.
 
 While support is growing steadily for the language, it is largely dismissed as not having effective scalability, and having far slower runtimes than more compiled, strongly-typed languages. In this article, we propose that many sophisticated techniques exist to enhance Ruby’s performance both in using existing runtimes to compile ruby to statically typed languages, and in using common anti-patterns to improve performance natively. Through experimentation and thorough research we conclude that Ruby performs competitively against it’s similar scripting language counterparts, and can see increases of [XXXXX]% in many cases.
 
-__Categories and Subject Descriptors:__ D.2.3 [Coding Tools and Techniques]: Object-oriented programming, B.6.3 [Design Aids]: Optimization   
-__General Terms:__ Optimization, Algorithms, Performance   
-__Additional Key Words and Phrases:__ Ruby, Web Development, JRE, C++, C   
+__Categories and Subject Descriptors:__ D.2.3 [Coding Tools and Techniques]: Object-oriented programming, B.6.3 [Design Aids]: Optimization
+
+__General Terms:__ Optimization, Algorithms, Performance
+
+__Additional Key Words and Phrases:__ Ruby, Web Development, JRE, C++, C
 
 ## INTRODUCTION
 
@@ -36,7 +38,7 @@ The MRI is short for Matz's Ruby Interpreter, which is sometimes also referred t
 | --------- |
      |
      | Interpret
-     | 
+     |
      v
 | --------- |
 |     C     |
@@ -65,13 +67,13 @@ User receiver methods whenever possible because it avoids the allocation of a co
 
 ```ruby
 2.1.1 :003 > str = "A string.\n"
- => "A string.\n" 
+ => "A string.\n"
 2.1.1 :004 > str2 = str
- => "A string.\n" 
+ => "A string.\n"
 2.1.1 :005 > str.chomp!
- => "A string." 
+ => "A string."
 2.1.1 :006 > str2
- => "A string." 
+ => "A string."
 2.1.1 :007 >
 ```
 <div class="figure">Fig 2. Receiver modifying methods vs receiver duplicating methods</div>
@@ -85,7 +87,7 @@ The initial implementation of the MRI is one of the primary reasons that Ruby ge
 ### 2.1 Purpose
 
 Jruby endeavors to solve many Ruby performance issues by eliminating the standard interpreter and instead taking ruby syntax and compiling as much of the core libraries as possible to Java bytecode. Current versions of JRuby support both just-in-time compilation as well as ahead-of-time compilation to Java bytecode. In using these various stages of bytecode in addition to some portions of the standard interpreter, this allows for several advantages over the standard interpreter.
-  One of the more obvious improvements is the ability to call and use standard Java libraries and classes from within ruby projects. For larger organizations already using Java for core library support, this allows for improved flexibility of the development environment. 
+  One of the more obvious improvements is the ability to call and use standard Java libraries and classes from within ruby projects. For larger organizations already using Java for core library support, this allows for improved flexibility of the development environment.
 
 ### 2.2. Performance
 
@@ -101,7 +103,7 @@ While JRuby allows for enhanced support and compatibility with Java libraries an
 
 ### 2.4. Development Lag
 
-Due to JRuby’s implementation being dependent on Ruby releases prior to implementation and support, this has created an unfortunately long lag time, with the most recent release of JRuby only supporting Ruby version 1.9.3, which was initially released in 2011. 
+Due to JRuby’s implementation being dependent on Ruby releases prior to implementation and support, this has created an unfortunately long lag time, with the most recent release of JRuby only supporting Ruby version 1.9.3, which was initially released in 2011.
 
 ### 2.5 Summary
 
@@ -121,7 +123,7 @@ Rubinius was originally created to be a Ruby virtual machine and runtime written
 
 Rubinius initially achieved performance equal or slightly better to that of the Yarv interpreter. However, in recent years the MRI interpreter has consistently out performed Rubinius on most benchmark tests.
 
-Rubinius consistently benchmarks as one of the slowest modern implementations of the Ruby language.                                     
+Rubinius consistently benchmarks as one of the slowest modern implementations of the Ruby language.
 
 ### 3.4 Concurrency
 
@@ -149,16 +151,16 @@ YARV instructions for a simple program:
 2.1.1 :001 > code = <<CODE
 2.1.1 :002"> puts 1 + 2
 2.1.1 :003"> CODE
- => "puts 1 + 2\n" 
+ => "puts 1 + 2\n"
 2.1.1 :004 > puts RubyVM::InstructionSequence.compile(code).disasm
 == disasm: <RubyVM::InstructionSequence:<compiled>@<compiled>>==========
 0000 trace            1                                               (   1)
-0002 putself          
-0003 putobject_OP_INT2FIX_O_1_C_ 
+0002 putself
+0003 putobject_OP_INT2FIX_O_1_C_
 0004 putobject        2
 0006 opt_plus         <callinfo!mid:+, argc:1, ARGS_SKIP>
 0008 opt_send_simple  <callinfo!mid:puts, argc:1, FCALL|ARGS_SKIP>
-0010 leave            
+0010 leave
  => nil
 ```
 
@@ -205,7 +207,7 @@ concat_time = Benchmark.measure do
   end
 end
 
-# => #<Benchmark::Tms:0x007fdf9ba49ea8 @label="", @real=79.152523, @cstime=0.0, @cutime=0.0, @stime=0.04000000000000001, @utime=79.11, @total=79.15> 
+# => #<Benchmark::Tms:0x007fdf9ba49ea8 @label="", @real=79.152523, @cstime=0.0, @cutime=0.0, @stime=0.04000000000000001, @utime=79.11, @total=79.15>
 
 interp_time = Benchmark.measure do
   20000000.times do
@@ -218,7 +220,7 @@ end
 The collect|map methods with blocks are faster because it returns a new array rather than an enumerator. This can be leveraged to increase speed when compared to Symbol.to_proc implementations. Though, the latter is typically much more preferable to read. The reason that the Symbol.to_proc is slower is because to_proc is called on the symbol to perform the following conversion:
 
 ```ruby
-:method.to_proc 
+:method.to_proc
 # => -> x { x.method }
 fake_data = 20.times.map { |t| Fake.new(t) }
 
@@ -248,7 +250,7 @@ collect_time = Benchmark.measure do
   end
 end
 
-# => #<Benchmark::Tms:0x007fdf9b821518 @label="", @real=386.234513, @cstime=0.0, @cutime=0.0, @stime=1.1800000000000006, @utime=384.28, @total=385.46> 
+# => #<Benchmark::Tms:0x007fdf9b821518 @label="", @real=386.234513, @cstime=0.0, @cutime=0.0, @stime=1.1800000000000006, @utime=384.28, @total=385.46>
  :037 >
 ```
 
@@ -278,7 +280,7 @@ Sometimes, there are still issues with memory leakage, which occurs when workers
 ```ruby
 # --- Start of unicorn worker killer code ---
 
-if ENV['RAILS_ENV'] == 'production' 
+if ENV['RAILS_ENV'] == 'production'
   require 'unicorn/worker_killer'
 
   max_request_min =  500
@@ -308,8 +310,8 @@ In this article, we examined a number independent Ruby optimization efforts. Eac
 [1] pry(main)> class NilClass
 [1] pry(main)*   def nil?
 [1] pry(main)*     false
-[1] pry(main)*   end  
-[1] pry(main)* end  
+[1] pry(main)*   end
+[1] pry(main)* end
 => :nil?
 [2] pry(main)> nil.nil?
 => false
