@@ -87,10 +87,10 @@ Jruby endeavors to solve many Ruby performance issues by eliminating the standar
 ### 2.2. Performance
 
 In 2007, JRuby’s overall performace was compared with Ruby 1.8.5, the Yarv interpreter (now merged into Ruby’s official interpreter), and Rubinius. In it, only 10% of tests performed had JRuby outperforming standard Ruby. These speed enhancements, however, still managed to run all Ruby benchmarks without timing out or producing an error, a claim that no other non-standard Ruby implementation could make [Cangiano, 2007].
-(Figure 1)
-However, benchmarks performed in 2014 between the latest implementations of JRuby and Ruby (Figure 1) are comparable to standard Ruby, but also ramp up significantly in comparison to Ruby in Memory usage (to almost 10x).
+(Image 2)
+Recent benchmarks performed in 2014 between the latest implementations of JRuby and Ruby (Image 2) are comparable to standard Ruby. While some benchmarks provided an optimized runtime, the increased memory overhead of JRuby (>10x) makes scaling ruby applications problematic.
 
-If memory usage isn’t a priority for a given Ruby project, the biggest additional downside in performance of JRuby has to do with the speed of initializing the JVM to begin with. A simple ruby script that would take the MRI a fraction of a second to run would require several additional seconds just due to JVM launch times.
+In addition to JRuby's memory woes, the biggest performance downside of JRuby comes from the speed of initializing the JVM to begin with. A simple ruby script that would take the MRI a fraction of a second to run would require several additional seconds just due to JVM launch times.
 
 ### 2.3 Lack of C Support
 
@@ -132,14 +132,13 @@ Rubinius’ development has been spotty, depending heaving on a few developers a
 ## 4. YARV
 
 
-
 ```
 CODE => TOKENIZATION => PARSE TREE => COMPILATION => YARV INSTRUCTIONS
 ```
 
 When a Ruby program is executed, it first tokenizes the program. This means that the contents are converted into a collection of tokens with associated types.  Ruby uses the LALR (Look-Ahead Left Reversed Rightmost Derivation) Parser to apply meaning to the tokens and construct the Abstract Syntax Tree. The compilation step was introduced with Ruby 1.9, and is where the YARV (Yet Another Ruby Virtual Machine) comes into play. It translates the code into bytecode, or YARV instructions.
 
-YARV instructions for a simple program:
+
 
 ```
 ~|||$ irb
@@ -158,6 +157,7 @@ YARV instructions for a simple program:
 0010 leave
  => nil
 ```
+<div class="figure">Figure #: YARV instructions for a simple program</div>
 
 The introduction of the compilation step and YARV have significantly helped the execution speed of Ruby programs. However, there's always room for more improvements.
 
@@ -194,6 +194,7 @@ Nevertheless, you're right the GIL is not as bad as you would initially think: y
 
 String interpolation is significantly more performant than concatentation because it doesn't need to allocate new strings, it just modifies a single string in place.
 
+```ruby
 require 'benchmark'
 
 concat_time = Benchmark.measure do
@@ -206,11 +207,13 @@ end
 
 interp_time = Benchmark.measure do
   20000000.times do
-    str = 'str1' << 'str2' << 'str3'
+    str = "#{str1}#{str2}#{str3}"
   end
 end
 
 # => #<Benchmark::Tms:0x007fdf9b990bd8 @label="", @real=22.713976, @cstime=0.0, @cutime=0.0, @stime=0.009999999999999995, @utime=22.689999999999998, @total=22.7>
+```
+<div class="figure">Figure #: Interpolation vs concatenation of Ruby Strings</div>
 
 The collect|map methods with blocks are faster because it returns a new array rather than an enumerator. This can be leveraged to increase speed when compared to Symbol.to_proc implementations. Though, the latter is typically much more preferable to read. The reason that the Symbol.to_proc is slower is because to_proc is called on the symbol to perform the following conversion:
 
@@ -248,6 +251,7 @@ end
 # => #<Benchmark::Tms:0x007fdf9b821518 @label="", @real=386.234513, @cstime=0.0, @cutime=0.0, @stime=1.1800000000000006, @utime=384.28, @total=385.46>
  :037 >
 ```
+<div class="figure">Figure #: Procs vs Blocks vs Collects</div>
 
 There are also garbage collection modifications that can be made in order to further optimize Ruby execution speed for most systems.
 
@@ -261,6 +265,7 @@ RUBY_GC_MALLOC_LIMIT=59000000
 # This is 24 times larger than default
 RUBY_HEAP_FREE_MIN=100000
 ```
+<div class="figure">Figure #: Garbage Collection Modification</div>
 
 ### 4.4 Use Unicorn
 
@@ -292,6 +297,8 @@ end
 require ::File.expand_path('../config/environment',  __FILE__)
 run YourApp::Application
 ```
+<div class="figure">Figure #: Example Unicorn Implementation</div>
+
 
 ## CONCLUSIONS
 
@@ -310,8 +317,6 @@ Rei Odaira, Jose G. Castanos, Hisanobu Tomari, 2014, Eliminating Global Interpre
 Antonio Cangiano. 2007. The Great Ruby Shootout (December 2007). Retrieved March 31, 2014 http://programmingzen.com/2007/12/03/the-great-ruby-shootout/ 
 
 Pat Shaughnessy. 2014. Ruby Under a Microscope: An Illustrated Guide to Ruby Internals
-
-
 
 http://www.rubyinside.com/ruby-1-9-3-faster-loading-times-require-4927.html
 
