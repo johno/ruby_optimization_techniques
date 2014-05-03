@@ -255,7 +255,7 @@ end
 
 There are also garbage collection modifications that can be made in order to further optimize Ruby execution speed for most systems.
 
-``ruby
+```ruby
 # This is 60(!) times larger than default
 RUBY_HEAP_MIN_SLOTS=600000
 
