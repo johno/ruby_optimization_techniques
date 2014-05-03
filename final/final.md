@@ -162,7 +162,8 @@ When a Ruby program is executed, it first tokenizes the program. This means that
 The introduction of the compilation step and YARV have significantly helped the execution speed of Ruby programs. However, there's always room for more improvements.
 
 ### 4.1 Purpose
- The Ruby MRI is short for Matz's Ruby Interpreter, and is the reference implementation for the Ruby programming language. It was released to the public in 1995, and is still actively developed, with the latest stable build being Ruby 2.1.1.
+ 
+The Ruby MRI is short for Matz's Ruby Interpreter, and is the reference implementation for the Ruby programming language. It was released to the public in 1995, and is still actively developed, with the latest stable build being Ruby 2.1.1.
 
 The YARV is an interpreter developed by Koichi Sasada that's also known as the KRI. It was developed in order to reduce the execution time of Ruby programs, and was very successful. As a result, YARV was merged into Ruby 1.9.0 and has replaced the MRI.
 
@@ -173,6 +174,11 @@ That being said, there are numerous methods and best practices that developers c
 ### 4.2 Performance Out of the Box
 
 Thanks to the introduction of YARV, vanilla Ruby, on a single thread, has the ability to outperform other alternative Ruby implementations. Consider the following figure, that measures Rails requests per second.
+
+XXX
+
+![benchie](https://cloud.githubusercontent.com/assets/1424573/2869071/3222d660-d258-11e3-91ed-cef35d189be1.png)
+<div class="figure">Fig. #. App Load Benchmark</div>
 
 ### 4.3 Global Interpreter Lock
 
@@ -299,7 +305,6 @@ run YourApp::Application
 ```
 <div class="figure">Figure #: Example Unicorn Implementation</div>
 
-
 ## CONCLUSIONS
 
 In this article, we examined a number independent Ruby optimization efforts. Each of these efforts seek to achieve performance improvements through a variety of techniques. In our examination we’ve determined that for each of these techniques there are certain sacrifices, that outweigh the marginal benefits are gained. Unless a particular feature is needed (such as full threading support or inline Java) the best practices for stable, performant Ruby code exist by utilizing the newest versions of the core language.
@@ -328,6 +333,4 @@ SASADA KOICHI. YARV: yet another RubyVM: innovating the ruby interpreter. OOPSLA
 
 SHAUGHNESSY PAT. Visualizing Garbage Collection in Rubinius, JRuby and Ruby 2.0, Ruby Conference, 2013.
 
-http://www.rubyinside.com/ruby-1-9-3-faster-loading-times-require-4927.html
-
-http://www.valentinmihov.com/2009/07/13/ruby_19_vs_ruby_18_benchmark/
+YUKIHIRO MATSUMOTO. 2010. From Lisp to Ruby to Rubinius. 
