@@ -54,13 +54,13 @@ A Ruby script undergoes a tokenization step, which is then parsed into an Abstra
 Since there isn't a bytecode compilation step, the execution of Ruby programs requires walking the MRI's internal Abstract Syntax Tree. This slows the execution speed significantly because it's more costly to interpret the AST data structure during runtime.
 
 ![ch_abstract_syntree](https://cloud.githubusercontent.com/assets/1424573/2803533/3c359946-cc9d-11e3-9b35-217ccda504df.png)
-<div class="figure">Fig. 2. Abstract Syntax Tree <http://edwinmeyer.com/Release_Integrated_RHG_09_10_2008/intro.html></div>
+<div class="figure">Img. 1. Abstract Syntax Tree <http://edwinmeyer.com/Release_Integrated_RHG_09_10_2008/intro.html></div>
 
 ### 2.3 Optimizations
 
 User receiver methods whenever possible because it avoids the allocation of a copied string.
 
-```ruby
+```
 2.1.1 :003 > str = "A string.\n"
  => "A string.\n"
 2.1.1 :004 > str2 = str
@@ -214,7 +214,7 @@ end
 
 The collect|map methods with blocks are faster because it returns a new array rather than an enumerator. This can be leveraged to increase speed when compared to Symbol.to_proc implementations. Though, the latter is typically much more preferable to read. The reason that the Symbol.to_proc is slower is because to_proc is called on the symbol to perform the following conversion:
 
-```ruby
+```
 :method.to_proc
 # => -> x { x.method }
 fake_data = 20.times.map { |t| Fake.new(t) }
@@ -228,7 +228,7 @@ end
 #  => #<Benchmark::Tms:0x007fdf9b8b0498 @label="", @real=491.332415, @cstime=0.0, @cutime=0.0, @stime=4.8, @utime=426.06999999999994, @total=430.86999999999995>
 ```
 
-```ruby
+```
 block_time = Benchmark.measure do
   200000000.times do
     fake_data.map { |d| d.id }
@@ -238,7 +238,7 @@ end
 # => #<Benchmark::Tms:0x007fdf9b931d40 @label="", @real=431.731424, @cstime=0.0, @cutime=0.0, @stime=2.66, @utime=416.21000000000004, @total=418.87000000000006>
 ```
 
-```ruby
+```
 collect_time = Benchmark.measure do
   200000000.times do
     fake_data.collect { |d| d.id }
@@ -251,7 +251,7 @@ end
 
 There are also garbage collection modifications that can be made in order to further optimize Ruby execution speed for most systems.
 
-``ruby
+```
 # This is 60(!) times larger than default
 RUBY_HEAP_MIN_SLOTS=600000
 
@@ -272,9 +272,7 @@ Ruby 2.0 makes process forking even more efficient with Unicorn because it imple
 
 Sometimes, there are still issues with memory leakage, which occurs when workers get stuck or timeout. With the inclusion of a gem, and a small snippet of code that's included below, these edge cases are covered.
 
-```ruby
-# --- Start of unicorn worker killer code ---
-
+```
 if ENV['RAILS_ENV'] == 'production'
   require 'unicorn/worker_killer'
 
@@ -291,8 +289,6 @@ if ENV['RAILS_ENV'] == 'production'
   use Unicorn::WorkerKiller::Oom, oom_min, oom_max
 end
 
-# --- End of unicorn worker killer code ---
-
 require ::File.expand_path('../config/environment',  __FILE__)
 run YourApp::Application
 ```
@@ -301,16 +297,21 @@ run YourApp::Application
 
 In this article, we examined a number independent Ruby optimization efforts. Each of these efforts seek to achieve performance improvements through a variety of techniques. In our examination we’ve determined that for each of these techniques there are certain sacrifices, that outweigh the marginal benefits are gained. Unless a particular feature is needed (such as full threading support or inline Java) the best practices for stable, performant Ruby code exist by utilizing the newest versions of the core language.
 
-```ruby
-[1] pry(main)> class NilClass
-[1] pry(main)*   def nil?
-[1] pry(main)*     false
-[1] pry(main)*   end
-[1] pry(main)* end
-=> :nil?
-[2] pry(main)> nil.nil?
-=> false
-```
+## ACKNOWLEDGMENTS
+
+The authors would like to thank Douglas Wiegley. He knows what he did.
+
+## REFERENCES
+
+Robert O’Donoghue. 2014. Careers Close-up: programmers and software engineers. (March 2014). Retrieved March 31, 2014 http://www.siliconrepublic.com/careers/item/36001-crs-cls-up
+
+Rei Odaira, Jose G. Castanos, Hisanobu Tomari, 2014, Eliminating Global Interpreter Locks in Ruby through Hardware Transactional Memory. PPoPP’14, February 15-19 2014, Orlando, FL, USA. DOI: http://dx.doi.org/10.1145/2555243.2555247
+
+Antonio Cangiano. 2007. The Great Ruby Shootout (December 2007). Retrieved March 31, 2014 http://programmingzen.com/2007/12/03/the-great-ruby-shootout/ 
+
+Pat Shaughnessy. 2014. Ruby Under a Microscope: An Illustrated Guide to Ruby Internals
+
+
 
 http://www.rubyinside.com/ruby-1-9-3-faster-loading-times-require-4927.html
 
