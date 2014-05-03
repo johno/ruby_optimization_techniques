@@ -310,13 +310,23 @@ The authors would like to thank Douglas Wiegley. He knows what he did.
 
 ## REFERENCES
 
-Robert O’Donoghue. 2014. Careers Close-up: programmers and software engineers. (March 2014). Retrieved March 31, 2014 http://www.siliconrepublic.com/careers/item/36001-crs-cls-up
+ROBERT O'DONOGHUE. 2014. Careers Close-up: programmers and software engineers. (March 2014). Retrieved March 31, 2014 http://www.siliconrepublic.com/careers/item/36001-crs-cls-up
 
-Rei Odaira, Jose G. Castanos, Hisanobu Tomari, 2014, Eliminating Global Interpreter Locks in Ruby through Hardware Transactional Memory. PPoPP’14, February 15-19 2014, Orlando, FL, USA. DOI: http://dx.doi.org/10.1145/2555243.2555247
+REI ODAIRA, JOSE G. CASTANOS, HISANOBU TOMARI. 2014. Eliminating Global Interpreter Locks in Ruby through Hardware Transactional Memory. PPoPP’14, February 15-19 2014, Orlando, FL, USA. DOI: http://dx.doi.org/10.1145/2555243.2555247
 
-Antonio Cangiano. 2007. The Great Ruby Shootout (December 2007). Retrieved March 31, 2014 http://programmingzen.com/2007/12/03/the-great-ruby-shootout/ 
+ANTONIO CANGIANO. 2007. The Great Ruby Shootout (December 2007). Retrieved March 31, 2014 http://programmingzen.com/2007/12/03/the-great-ruby-shootout/ 
 
-Pat Shaughnessy. 2014. Ruby Under a Microscope: An Illustrated Guide to Ruby Internals
+PAT SHAUGHNESSY. 2014. Ruby Under a Microscope: An Illustrated Guide to Ruby Internals
+
+BUSSINK DIRKJAN. Rubinius - Tales from the Trenches of Developing a Ruby implementation, Barcelona Ruby Conference, 2012.
+
+NUTTER CHARLES. Why JRuby?, Aloha Ruby Conf, 2012.
+
+SASADA KOICHI. YARV: Yet Another RubyVM-The Implementation and Evaluation. Transactions of Information Processing Society of Japan. Volume 47. 2006. Pages 57-73.  
+
+SASADA KOICHI. YARV: yet another RubyVM: innovating the ruby interpreter. OOPSLA '05 Companion to the 20th annual ACM SIGPLAN conference on Object-oriented programming, systems, languages, and applications. Pages 158-159.  
+
+SHAUGHNESSY PAT. Visualizing Garbage Collection in Rubinius, JRuby and Ruby 2.0, Ruby Conference, 2013.
 
 http://www.rubyinside.com/ruby-1-9-3-faster-loading-times-require-4927.html
 
