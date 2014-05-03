@@ -90,10 +90,10 @@ Jruby endeavors to solve many Ruby performance issues by eliminating the standar
 ### 2.2. Performance
 
 In 2007, JRuby’s overall performace was compared with Ruby 1.8.5, the Yarv interpreter (now merged into Ruby’s official interpreter), and Rubinius. In it, only 10% of tests performed had JRuby outperforming standard Ruby. These speed enhancements, however, still managed to run all Ruby benchmarks without timing out or producing an error, a claim that no other non-standard Ruby implementation could make [Cangiano, 2007].
-(Figure 1)
-However, benchmarks performed in 2014 between the latest implementations of JRuby and Ruby (Figure 1) are comparable to standard Ruby, but also ramp up significantly in comparison to Ruby in Memory usage (to almost 10x).
+(Image 2)
+Recent benchmarks performed in 2014 between the latest implementations of JRuby and Ruby (Image 2) are comparable to standard Ruby. While some benchmarks provided an optimized runtime, the increased memory overhead of JRuby (>10x) makes scaling ruby applications problematic.
 
-If memory usage isn’t a priority for a given Ruby project, the biggest additional downside in performance of JRuby has to do with the speed of initializing the JVM to begin with. A simple ruby script that would take the MRI a fraction of a second to run would require several additional seconds just due to JVM launch times.
+In addition to JRuby's memory woes, the biggest performance downside of JRuby comes from the speed of initializing the JVM to begin with. A simple ruby script that would take the MRI a fraction of a second to run would require several additional seconds just due to JVM launch times.
 
 ### 2.3 Lack of C Support
 
@@ -133,7 +133,6 @@ Rubinius is unique amongst Ruby implementations in that it does not have Global 
 Rubinius’ development has been spotty, depending heaving on a few developers and a few corporate sponsors. As a result Rubinius has constantly shifted focus. Rubinius currently offers a significant advantage over other Ruby interpreters only with regards to programming involving threading and concurrency. For all other uses, the standard MRI Ruby interpreter is faster and more consistently supported.
 
 ## 4. YARV
-
 
 
 ```
