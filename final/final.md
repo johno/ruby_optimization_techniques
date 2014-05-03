@@ -175,10 +175,8 @@ That being said, there are numerous methods and best practices that developers c
 
 Thanks to the introduction of YARV, vanilla Ruby, on a single thread, has the ability to outperform other alternative Ruby implementations. Consider the following figure, that measures Rails requests per second.
 
-XXX
-
-![benchie](https://cloud.githubusercontent.com/assets/1424573/2869071/3222d660-d258-11e3-91ed-cef35d189be1.png)
-<div class="figure">Fig. #. App Load Benchmark</div>
+![screen shot 2014-05-02 at 6 22 04 pm](https://cloud.githubusercontent.com/assets/1424573/2869079/0305431c-d259-11e3-8b58-6f2ea6ff23e9.png)
+<div class="figure">Fig. #. Rails requests per second.</div>
 
 ### 4.3 Global Interpreter Lock
 
