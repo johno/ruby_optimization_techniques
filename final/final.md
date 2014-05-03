@@ -20,11 +20,11 @@ In recent years, the Ruby programming language has grown its community and estab
 
 > When I see a bird that walks like a duck and swims like a duck and quacks like a duck, I call that bird a duck. <br>_- Heim, Michael (2007)._
 
-## MRI (> 1.9)
+## 1. MRI (> 1.9)
 
 The MRI is short for Matz's Ruby Interpreter, which is sometimes also referred to as CRuby. The MRI is named after Yukihiro Matsumoto, the chief designer of the Ruby language. The original MRI was the runtime environment from Ruby's inception to 1.8.7.
 
-### 2.1 Program Execution at a High Level
+### 1.1 Program Execution at a High Level
 
 ```
 | --------- |
@@ -49,14 +49,14 @@ The MRI is short for Matz's Ruby Interpreter, which is sometimes also referred t
 
 A Ruby script undergoes a tokenization step, which is then parsed into an Abstract Syntax Tree. The Ruby C code (MRI), reads and executes the AST. Note that there is no compilation or translation step.
 
-### 2.2 Performance
+### 1.2 Performance
 
 Since there isn't a bytecode compilation step, the execution of Ruby programs requires walking the MRI's internal Abstract Syntax Tree. This slows the execution speed significantly because it's more costly to interpret the AST data structure during runtime.
 
 ![ch_abstract_syntree](https://cloud.githubusercontent.com/assets/1424573/2803533/3c359946-cc9d-11e3-9b35-217ccda504df.png)
 <div class="figure">Img. 1. Abstract Syntax Tree <http://edwinmeyer.com/Release_Integrated_RHG_09_10_2008/intro.html></div>
 
-### 2.3 Optimizations
+### 1.3 Optimizations
 
 User receiver methods whenever possible because it avoids the allocation of a copied string.
 
@@ -73,11 +73,11 @@ User receiver methods whenever possible because it avoids the allocation of a co
 ```
 <div class="figure">Fig 3. Receiver modifying methods vs receiver duplicating methods</div>
 
-### Conclusion
+### 1.4 Summary
 
 The initial implementation of the MRI is one of the primary reasons that Ruby get its "bad wrap" for code execution speed.
 
-## JRUBY
+## 2. JRUBY
 
 ### 2.1 Purpose
 
@@ -104,17 +104,17 @@ Due to JRuby’s implementation being dependent on Ruby releases prior to implem
 
 While JRuby does offer some improved benchmark performance in a minority of cases, the slow development cycle and potential for a massive increase to memory footprint make it an unsuitable option for pure ruby development stacks.
 
-## Rubinius
+## 3. Rubinius
 
-### Purpose
+### 3.1 Purpose
 
 Rubinius is an implementation of the Ruby programming language and includes a bytecode virtual machine, Ruby syntax parser, bytecode compiler, generational garbage collector, just-in-time (JIT) native machine code compliler, and Ruby Core and Standard Libraries. Rubinius is written using Ruby and C++.
 
-### History
+### 3.2 History
 
 Rubinius was originally created to be a Ruby virtual machine and runtime written in pure ruby. The current ruby interpreter is primarily writen in non-Ruby langauges such as C. From 2007 to 2013, the software company Engine Yard was a primary backer of Rubinius. During that time the focus of Rubinius evolved from creating a completely bootstrapped Ruby VM to instead offering an implementation of Ruby with increased performance. Under this new direction, Rubinius partially abandoned the idea of bootstrapping the Ruby VM in all Ruby code, and instead sought to use C++ to increase performance and establish Rubinius as the fastest Ruby implementation. Recently Rubinius has focused on supporting concurrency and multi-threading.
 
-### Performance
+### 3.3 Performance
 
 Rubinius initially achieved performance equal or slightly better to that of the Yarv interpreter. However, in recent years the MRI interpreter has consistently out performed Rubinius on most benchmark tests.
 
@@ -125,20 +125,19 @@ Rubinius consistently benchmarks as one of the slowest modern implementations of
 Rubinius does outperform the MRI in threading and concurrency benchmark tests. As shown in the figure bellow, Rubinius (represented by rbx-2.0.0) has a nontrivial advantage over MRI and other Ruby implementations when exciting multithreaded code.
 Rubinius is unique amongst Ruby implementations in that it does not have Global Interpreter Lock (GIL). The GIL in all other Reuby implementation allows only one thread to execute at at a time, no matter how many processor cores are available. Not implementing the GIL gives Rubinius the ability to support true threading
 
-### 3.5 Conclusion
+### 3.5 Summary
 
 Rubinius’ development has been spotty, depending heaving on a few developers and a few corporate sponsors. As a result Rubinius has constantly shifted focus. Rubinius currently offers a significant advantage over other Ruby interpreters only with regards to programming involving threading and concurrency. For all other uses, the standard MRI Ruby interpreter is faster and more consistently supported.
 
 ## 4. YARV
 
+### 4.1 Background
 
 ```
 CODE => TOKENIZATION => PARSE TREE => COMPILATION => YARV INSTRUCTIONS
 ```
 
 When a Ruby program is executed, it first tokenizes the program. This means that the contents are converted into a collection of tokens with associated types.  Ruby uses the LALR (Look-Ahead Left Reversed Rightmost Derivation) Parser to apply meaning to the tokens and construct the Abstract Syntax Tree. The compilation step was introduced with Ruby 1.9, and is where the YARV (Yet Another Ruby Virtual Machine) comes into play. It translates the code into bytecode, or YARV instructions.
-
-
 
 ```
 ~|||$ irb
@@ -161,7 +160,7 @@ When a Ruby program is executed, it first tokenizes the program. This means that
 
 The introduction of the compilation step and YARV have significantly helped the execution speed of Ruby programs. However, there's always room for more improvements.
 
-### 4.1 Purpose
+### 4.2 Purpose
  
 The Ruby MRI is short for Matz's Ruby Interpreter, and is the reference implementation for the Ruby programming language. It was released to the public in 1995, and is still actively developed, with the latest stable build being Ruby 2.1.1.
 
@@ -171,14 +170,14 @@ As the default interpreter for the Ruby programming language, the MRI has receiv
 
 That being said, there are numerous methods and best practices that developers can follow in order to ensure that they're avoiding unnecessary bottlenecks.
 
-### 4.2 Performance Out of the Box
+### 4.3 Performance Out of the Box
 
 Thanks to the introduction of YARV, vanilla Ruby, on a single thread, has the ability to outperform other alternative Ruby implementations. Consider the following figure, that measures Rails requests per second.
 
 ![screen shot 2014-05-02 at 6 22 04 pm](https://cloud.githubusercontent.com/assets/1424573/2869079/0305431c-d259-11e3-8b58-6f2ea6ff23e9.png)
 <div class="figure">Fig. #. Rails requests per second.</div>
 
-### 4.3 Global Interpreter Lock
+### 4.4 Global Interpreter Lock
 
 When attempting to optimize execution speed, threads are often utilized in order to process tasks concurrently. This is a feature that Ruby supports, too. However, the MRI/YARV incorporates a Global Interpreter Lock, or GIL, that doesn't permit any true concurrency. A GIL refers to an interpreter thread that doesn't allow code that isn't thread safe to share itself with other threads. This results in little, to no, actual gain in speed when running threads on a multiprocessor machine.
 
@@ -194,7 +193,7 @@ Granted, this is a drastic step away from typical threading, but some proponents
 
 Nevertheless, you're right the GIL is not as bad as you would initially think: you just have to undo the brainwashing you got from Windows and Java proponents who seem to consider threads as the only way to approach concurrent activities. Just because Java was once aimed at a set-top box OS that didn't support multiple address spaces, and just because process creation in Windows used to be slow as a dog, doesn't mean that multiple processes (with judicious use of IPC) aren't a much better approach to writing apps for multi-CPU boxes than threads.
 
-### 4.4 Simple Code Enhancements
+### 4.5 Simple Code Enhancements
 
 String interpolation is significantly more performant than concatentation because it doesn't need to allocate new strings, it just modifies a single string in place.
 
@@ -271,7 +270,7 @@ RUBY_HEAP_FREE_MIN=100000
 ```
 <div class="figure">Figure #: Garbage Collection Modification</div>
 
-### 4.4 Use Unicorn
+### 4.5 Use Unicorn
 
 For Ruby on Rails web applications, a server typically runs on a single process, which means that every request is processed one at a time. This can create a significant bottle neck in your application. Fortunately, there are libraries to incorporate concurrency in your application. One of which is Unicorn.
 
