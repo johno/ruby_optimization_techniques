@@ -58,7 +58,7 @@ Since there isn't a bytecode compilation step, the execution of Ruby programs re
 
 ### 1.3 Optimizations
 
-User receiver methods whenever possible because it avoids the allocation of a copied string.
+Use receiver methods whenever possible because it avoids the allocation of a copied string.
 
 ```
 2.1.1 :003 > str = "A string.\n"
