@@ -54,7 +54,7 @@ A Ruby script undergoes a tokenization step, which is then parsed into an Abstra
 Since there isn't a bytecode compilation step, the execution of Ruby programs requires walking the MRI's internal Abstract Syntax Tree. This slows the execution speed significantly because it's more costly to interpret the AST data structure during runtime.
 
 ![ch_abstract_syntree](https://cloud.githubusercontent.com/assets/1424573/2803533/3c359946-cc9d-11e3-9b35-217ccda504df.png)
-<div class="figure">Img. 1. Abstract Syntax Tree <http://edwinmeyer.com/Release_Integrated_RHG_09_10_2008/intro.html></div>
+<div class="figure">Fig. 2. Abstract Syntax Tree <http://edwinmeyer.com/Release_Integrated_RHG_09_10_2008/intro.html></div>
 
 ### 1.3 Optimizations
 
@@ -156,7 +156,7 @@ When a Ruby program is executed, it first tokenizes the program. This means that
 0010 leave
  => nil
 ```
-<div class="figure">Figure #: YARV instructions for a simple program</div>
+<div class="figure">Fig. 4. YARV instructions for a simple program</div>
 
 The introduction of the compilation step and YARV have significantly helped the execution speed of Ruby programs. However, there's always room for more improvements.
 
@@ -175,7 +175,7 @@ That being said, there are numerous methods and best practices that developers c
 Thanks to the introduction of YARV, vanilla Ruby, on a single thread, has the ability to outperform other alternative Ruby implementations. Consider the following figure, that measures Rails requests per second.
 
 ![screen shot 2014-05-02 at 6 22 04 pm](https://cloud.githubusercontent.com/assets/1424573/2869079/0305431c-d259-11e3-8b58-6f2ea6ff23e9.png)
-<div class="figure">Fig. #. Rails requests per second.</div>
+<div class="figure">Fig. 5. Rails requests per second.</div>
 
 ### 4.4 Global Interpreter Lock
 
@@ -216,7 +216,7 @@ end
 
 # => #<Benchmark::Tms:0x007fdf9b990bd8 @label="", @real=22.713976, @cstime=0.0, @cutime=0.0, @stime=0.009999999999999995, @utime=22.689999999999998, @total=22.7>
 ```
-<div class="figure">Figure #: Interpolation vs concatenation of Ruby Strings</div>
+<div class="figure">Fig. 6. Interpolation vs concatenation of Ruby Strings</div>
 
 The collect|map methods with blocks are faster because it returns a new array rather than an enumerator. This can be leveraged to increase speed when compared to Symbol.to_proc implementations. Though, the latter is typically much more preferable to read. The reason that the Symbol.to_proc is slower is because to_proc is called on the symbol to perform the following conversion:
 
@@ -254,7 +254,7 @@ end
 # => #<Benchmark::Tms:0x007fdf9b821518 @label="", @real=386.234513, @cstime=0.0, @cutime=0.0, @stime=1.1800000000000006, @utime=384.28, @total=385.46>
  :037 >
 ```
-<div class="figure">Figure #: Procs vs Blocks vs Collects</div>
+<div class="figure">Fig. 7. Procs vs Blocks vs Collects</div>
 
 There are also garbage collection modifications that can be made in order to further optimize Ruby execution speed for most systems.
 
@@ -268,7 +268,7 @@ RUBY_GC_MALLOC_LIMIT=59000000
 # This is 24 times larger than default
 RUBY_HEAP_FREE_MIN=100000
 ```
-<div class="figure">Figure #: Garbage Collection Modification</div>
+<div class="figure">Fig. 8. Garbage Collection Modification</div>
 
 ### 4.5 Use Unicorn
 
@@ -300,7 +300,7 @@ end
 require ::File.expand_path('../config/environment',  __FILE__)
 run YourApp::Application
 ```
-<div class="figure">Figure #: Example Unicorn Implementation</div>
+<div class="figure">Fig. 9. Example Unicorn Implementation</div>
 
 ## CONCLUSIONS
 
